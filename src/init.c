@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbredykh <dbredykh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 12:42:08 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/05 17:28:49 by dbredykh         ###   ########.fr       */
+/*   Updated: 2024/01/07 22:18:53 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	main(int argc, char **argv)
 	int		fd;
 
 	info = (t_info *)malloc(sizeof(t_info));
+	info->player = (t_player *)malloc(sizeof(t_player));
+	info->map = (t_map *)malloc(sizeof(t_map));
 	if (argc < 2)
 		put_usage(info);
 	fd = open(argv[1], O_RDONLY);
@@ -25,5 +27,6 @@ int	main(int argc, char **argv)
 		return (free(info), put_error("Error: Wrong map file\n"), 0);
 	if (!check_map(info, fd))
 		return (free(info), 1);
+	play_game(info);
 	return (0);
 }
