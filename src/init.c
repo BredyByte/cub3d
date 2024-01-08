@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 12:42:08 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/07 22:18:53 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:19:41 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ int	main(int argc, char **argv)
 {
 	t_info	*info;
 	int		fd;
+	char	tmp_map[4][4] = {('1', '1', '1', '1'), ('1', '0', '0', '1'), ('1', '0', '0', '1'), ('1', '1', '1', '1')};
 
 	info = (t_info *)malloc(sizeof(t_info));
+	info->matrix_map = tmp_map;
 	info->player = (t_player *)malloc(sizeof(t_player));
 	info->map = (t_map *)malloc(sizeof(t_map));
 	if (argc < 2)

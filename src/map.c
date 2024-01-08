@@ -6,11 +6,34 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:50:35 by pvilchez          #+#    #+#             */
-/*   Updated: 2024/01/07 23:33:52 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:53:25 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	draw_map(t_info *info)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < info->map->height)
+	{
+		j = 0;
+		while (j < info->map->width)
+		{
+			if (info->map->map[i][j] == '1')
+				draw_square(info, j, i, WALL_COLOR);
+			else if (info->map->map[i][j] == '2')
+				draw_square(info, j, i, SPRITE_COLOR);
+			else if (info->map->map[i][j] == '0')
+				draw_square(info, j, i, FLOOR_COLOR);
+			j++;
+		}
+		i++;
+	}
+}
 
 void	init_map(t_info *info)
 {
@@ -32,5 +55,6 @@ void	init_map(t_info *info)
 		}
 		i++;
 	}
+	draw_map(info);
 	mlx_image_to_window(info->mlx, info->map->m_img, MARGIN, MARGIN);
 }

@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 20:49:16 by pvilchez          #+#    #+#             */
-/*   Updated: 2024/01/07 22:26:18 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:21:01 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_map
 	int			height;
 	int			pos_x;
 	int			pos_y;
-	int			**map;
+	char		**map;
 }				t_map;
 
 typedef struct s_player
