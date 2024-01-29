@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 18:04:36 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/28 13:01:50 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 18:44:38 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	move(t_info *info, int direction)
 	else if (direction == 2)
 		ref_angle = info->player->player_angle - M_PI_2;
 	else if (direction == 3)
-		ref_angle = info->player->player_angle;
-	else
 		ref_angle = info->player->player_angle + M_PI;
+	else
+		ref_angle = info->player->player_angle;
 	dis_x = MOVE_SPEED * sin(ref_angle);
 	new_x = info->player->player_x + dis_x;
 	dis_y = MOVE_SPEED * cos(ref_angle);
@@ -59,9 +59,9 @@ void	ft_hook(void *param)
 	if (mlx_is_key_down(info->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(info->mlx);
 	if (mlx_is_key_down(info->mlx, MLX_KEY_RIGHT))
-		rot_player(info, 1);
-	if (mlx_is_key_down(info->mlx, MLX_KEY_LEFT))
 		rot_player(info, -1);
+	if (mlx_is_key_down(info->mlx, MLX_KEY_LEFT))
+		rot_player(info, 1);
 	if (mlx_is_key_down(info->mlx, MLX_KEY_W))
 		move(info, 1);
 	if (mlx_is_key_down(info->mlx, MLX_KEY_S))

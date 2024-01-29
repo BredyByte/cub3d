@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 19:25:03 by pvilchez          #+#    #+#             */
-/*   Updated: 2024/01/28 14:05:51 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:03:16 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	calc_next_x(double x, t_info *info)
 	if (x - info->player->player_x < 0)
 	{
 		if (x == floor(x))
-			return (floor(x) - 1);
-		else
 			return (floor(x));
+		else
+			return (floor(x) + 1);
 	}
 	else
 		return (floor(x));

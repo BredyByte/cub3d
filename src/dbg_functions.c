@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 11:36:47 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/28 13:37:23 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:37:58 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,19 @@ void	dbg_print_ray(t_ray *ray, int percent)
 	}
 }
 
-void	dbg_print_ray_mini(t_ray *ray, int percent)
+void	dbg_print_ray_mini(t_ray *ray, int rays)
 {
-	int	iter;
+	static int	margin;
+	static int	iter;
 
-	iter = (SCR_W * percent) / 100;
-	if (ray->id % iter == 0)
+	if (ray->id == 0)
 	{
+		iter = 0;
+		margin = (int)(SCR_W / (rays + 1));
+	}
+	if (ray->id == iter || ray->id == SCR_W - 1)
+	{
+		iter += margin;
 		if (ray->id == 0)
 			printf("\n");
 		printf("ray: %3d  angle: %.3f  ", ray->id, ray->angle);

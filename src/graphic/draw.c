@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:27:11 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/24 22:56:47 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 18:32:15 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ void	draw(t_info *info)
 	double	angle_frac;
 
 	x = 0;
-	info->ray->angle = info->player->player_angle - (POV_ANGLE / 2);
+	info->ray->angle = info->player->player_angle + (POV_ANGLE / 2);
 	angle_frac = (POV_ANGLE / SCR_W);
 	while (x < SCR_W)
 	{
-		info->ray->angle = info->ray->angle + angle_frac;
+		info->ray->angle = info->ray->angle - angle_frac;
 		ray_casting(info, x);
 		w_height = SCR_H / info->ray->dist;
 		w_start = (SCR_H / 2) - (w_height / 2);

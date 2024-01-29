@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 10:59:52 by dbredykh          #+#    #+#             */
-/*   Updated: 2024/01/28 12:41:59 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:18:19 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool		is_wall(double x, double y, t_info *info);
 // dbg_functions.c
 void		dbg_file_data(t_info *info);
 void		dbg_print_ray(t_ray *ray, int percent);
-void		dbg_print_ray_mini(t_ray *ray, int percent);
+void		dbg_print_ray_mini(t_ray *ray, int rays);
 
 // ----------------- GRAPHIC ----------------- //
 // draw.c

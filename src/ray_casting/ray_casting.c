@@ -6,7 +6,7 @@
 /*   By: pvilchez <pvilchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 20:10:17 by pvilchez          #+#    #+#             */
-/*   Updated: 2024/01/28 14:32:43 by pvilchez         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:48:37 by pvilchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ void	calc_collision_x(t_info *info)
 	info->ray->cx_y = info->player->player_y;
 	while (!is_wall(info->ray->cx_x, info->ray->cx_y, info))
 	{
-		if (info->ray->angle > M_PI_2 && info->ray->angle < (3 * M_PI_2))
-			info->ray->cx_x = ceil(info->ray->cx_x) - 1;
-		else
+		if (info->ray->angle < M_PI_2 && info->ray->angle > (3 * M_PI_2))
 			info->ray->cx_x = floor(info->ray->cx_x) + 1;
+		else
+			info->ray->cx_x = ceil(info->ray->cx_x) - 1;
 		info->ray->cx_y = (info->player->player_x - info->ray->cx_x) * tan(info->ray->angle);
 		info->ray->cx_y += info->player->player_y;
 	}
@@ -93,4 +93,5 @@ void	ray_casting(t_info *info, int x)
 		else
 			info->ray->texture = info->ea_txt;
 	}
+	dbg_print_ray_mini(info->ray, 12);
 }
