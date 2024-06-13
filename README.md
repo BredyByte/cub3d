@@ -1,6 +1,6 @@
 # 🧊 Cub3D
 
-> This repository contains a "cub3d" project that is part of the École 42 curriculum
+> This repository contains 'cub3d' project that is part of the École 42 curriculum.
 
 ![Screen Recording - Feb 10, 2024](https://github.com/BredyByte/cub3d/assets/81176650/62caeeeb-18d1-46e9-a188-019cf8f778e8)
 
