@@ -13,7 +13,7 @@ PARSER_PATH = parser
 RAY_CASTING_PATH = ray_casting
 GRAPHIC_PATH = graphic
 MLX_PATH = assets/MLX42
-MLX_LIB_PATH = assets/MLX42/libmlx42.a
+MLX_LIB_PATH = assets/MLX42/build/libmlx42.a
 LIBFT_PATH = assets/libft
 LIBFT_LIB_PATH = assets/libft/libft.a
 
@@ -43,15 +43,15 @@ OS := $(shell uname)
 
 ifeq ($(OS), Darwin)
 	# macOS specific flags
-	LIBS = -lglfw -L "/Users/${USER}/.brew/opt/glfw/lib/"
+	LIBS = -lglfw -L "/Users/${USER}/.brew/opt/glfw/lib/" -framework OpenGL
 else
 	# Linux specific flags
-	LIBS = -ldl -lglfw -pthread -lm
+	LIBS = -ldl -lglfw -pthread -lm -lGL -lX11 -lXrandr -lXinerama -lXcursor
 endif
 
-all: $(MLX_LIB_PATH) $(LIBFT_LIB_PATH) $(NAME)
+all: $(LIBFT_LIB_PATH) $(NAME)
 
-.SILENT: all $(MLX_LIB_PATH) $(LIBFT_LIB_PATH) $(NAME) $(OBJ) clean fclean re
+.SILENT: all $(LIBFT_LIB_PATH) $(NAME) $(OBJ) clean fclean re
 
 $(NAME): $(OBJ)
 	$(CC) -pie $(OBJ) $(LIBFT_LIB_PATH) $(MLX_LIB_PATH) $(LIBS) $(HEADERS) $(LDFLAGS) -o $@

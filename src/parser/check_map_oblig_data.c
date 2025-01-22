@@ -59,6 +59,7 @@ static int	check_map_textures(char *line, t_parser *parser)
 
 	texture_loc = ft_str_del_space(line + 2);
 	fd = open(texture_loc, O_RDONLY);
+
 	if (fd < 0)
 		return (free(texture_loc), 0);
 	if (!is_valid_ext_png(texture_loc))

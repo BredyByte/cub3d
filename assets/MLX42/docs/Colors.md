@@ -12,8 +12,8 @@ Colors are commonly represented as `4-byte` integers. This 4-byte integer is a g
 Channel | Description   | RGBA representation
 :------:|:-------------:|:-------------------:
 `R`     | Red Channel   | `0xFF000000`
-`G`     | Blue Channel  | `0x00FF0000`
-`B`     | Green Channel | `0x0000FF00`
+`G`     | Green Channel | `0x00FF0000`
+`B`     | Blue Channel  | `0x0000FF00`
 `A`     | Alpha Channel | `0x000000FF`
 
 Combining these four channel values into one will result in a non-transparent, white color.
@@ -32,7 +32,7 @@ int get_rgba(int r, int g, int b, int a)
 }
 ```
 
-We can also do the reverse to retrieve each individual byte again:
+We can also do this in reverse to retrieve each individual byte again:
 
 ```c
 // Get the red channel.
@@ -46,7 +46,7 @@ int get_r(int rgba)
 int get_g(int rgba)
 {
     // Move 2 bytes to the right and mask out the first byte.
-    return ((w >> 16) & 0xFF);
+    return ((rgba >> 16) & 0xFF);
 }
 
 // Get the blue channel.
@@ -70,6 +70,8 @@ In this small example we will create a white image:
 
 ```c
 #include "MLX42/MLX42.h"
+#include <stdlib.h>
+#include <string.h>
 
 // Bytes Per Pixel. Since each pixel is represented as an integer, it will be four bytes for four channels.
 #define BPP sizeof(int32_t)
@@ -78,19 +80,19 @@ int32_t	main(void)
 {
     // Init mlx with a canvas size of 256x256 and the ability to resize the window.
     mlx_t* mlx = mlx_init(256, 256, "MLX42", true);
-
+    
     if (!mlx) exit(EXIT_FAILURE);
 
     // Create a 128x128 image.
     mlx_image_t* img = mlx_new_image(mlx, 128, 128);
 
-    // Set the channels of each pixel in our image to the maximum byte value of 255.
+    // Set the channels of each pixel in our image to the maximum byte value of 255. 
     memset(img->pixels, 255, img->width * img->height * BPP);
 
     // Draw the image at coordinate (0, 0).
     mlx_image_to_window(mlx, img, 0, 0);
 
-    // Run the main loop and terminate on quit.
+    // Run the main loop and terminate on quit.  
     mlx_loop(mlx);
     mlx_terminate(mlx);
 

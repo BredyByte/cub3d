@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   mlx_init.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: W2Wizard <w2.wizzard@gmail.com>              +#+                     */
+/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/28 00:24:30 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2022/08/10 13:00:53 by lde-la-h      ########   odam.nl         */
+/*   Updated: 2023/06/08 18:16:19 by XEDGit        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ static bool mlx_create_buffers(mlx_t* mlx)
 }
 
 /**
- * Compiles the given shader source code, of a given shader type.
+ * Compiles the given shader source code of a given shader type.
  * Returns shader object via param.
- * 
+ *
  * @param code The shader source code.
  * @param Type GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER, ...
  * @return Non-zero on success, else 0.
@@ -81,7 +81,7 @@ static uint32_t mlx_compile_shader(const char* code, int32_t type)
 	int32_t success;
 	char infolog[512] = {0};
 
-	if (!code || (shader = glCreateShader(type)) == 0) 
+	if (!code || (shader = glCreateShader(type)) == 0)
 		return (0);
 
 	GLint len = strlen(code);
@@ -92,6 +92,7 @@ static uint32_t mlx_compile_shader(const char* code, int32_t type)
 	{
 		glGetShaderInfoLog(shader, sizeof(infolog), NULL, infolog);
 		fprintf(stderr, "%s", infolog);
+		glDeleteShader(shader);
 		return (0);
 	}
 	return (shader);
@@ -99,46 +100,56 @@ static uint32_t mlx_compile_shader(const char* code, int32_t type)
 
 static bool mlx_init_render(mlx_t* mlx)
 {
-	uint32_t vshader = 0;
-	uint32_t fshader = 0;
-	char infolog[512] = {0};
-	mlx_ctx_t* mlxctx = mlx->context;
+    uint32_t vshader = 0;
+    uint32_t fshader = 0;
+    char infolog[512] = {0};
+    mlx_ctx_t* mlxctx = mlx->context;
 
-	glfwMakeContextCurrent(mlx->window);
-	glfwSetFramebufferSizeCallback(mlx->window, framebuffer_callback);
-	glfwSetWindowUserPointer(mlx->window, mlx);
-	glfwSwapInterval(MLX_SWAP_INTERVAL);
+    glfwMakeContextCurrent(mlx->window);
+    glfwSetFramebufferSizeCallback(mlx->window, framebuffer_callback);
+    glfwSetWindowUserPointer(mlx->window, mlx);
+    glfwSwapInterval(MLX_SWAP_INTERVAL);
 
-	// Load all OpenGL function pointers
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		return (mlx_error(MLX_GLADFAIL));
-	
-	if (!(vshader = mlx_compile_shader(vert_shader, GL_VERTEX_SHADER)))
-		return (mlx_error(MLX_VERTFAIL));
-	if (!(fshader = mlx_compile_shader(frag_shader, GL_FRAGMENT_SHADER)))
-		return (mlx_error(MLX_FRAGFAIL));
-	if (!(mlxctx->shaderprogram = glCreateProgram()))
-		return (mlx_error(MLX_SHDRFAIL));
-	glAttachShader(mlxctx->shaderprogram, vshader);
-	glAttachShader(mlxctx->shaderprogram, fshader);
-	glLinkProgram(mlxctx->shaderprogram);
+    // Load all OpenGL function pointers
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        return (mlx_error(MLX_GLADFAIL));
+    if (!(vshader = mlx_compile_shader(vert_shader, GL_VERTEX_SHADER)))
+        return (mlx_error(MLX_VERTFAIL));
+    if (!(fshader = mlx_compile_shader(frag_shader, GL_FRAGMENT_SHADER)))
+        return (mlx_error(MLX_FRAGFAIL));;
+    if (!(mlxctx->shaderprogram = glCreateProgram()))
+    {
+        glDeleteShader(fshader);
+        glDeleteShader(vshader);
+        return (mlx_error(MLX_SHDRFAIL));
+    }
+    glAttachShader(mlxctx->shaderprogram, vshader);
+    glAttachShader(mlxctx->shaderprogram, fshader);
+    glLinkProgram(mlxctx->shaderprogram);
 
-	int32_t success;
-	glGetProgramiv(mlxctx->shaderprogram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(mlxctx->shaderprogram, sizeof(infolog), NULL, infolog);
-		fprintf(stderr, "%s", infolog);
-		return (mlx_error(MLX_SHDRFAIL));
-	}
-	glDeleteShader(vshader);
-	glDeleteShader(fshader);
-	glUseProgram(mlxctx->shaderprogram);
+    int32_t success;
+    glGetProgramiv(mlxctx->shaderprogram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(mlxctx->shaderprogram, sizeof(infolog), NULL, infolog);
+        fprintf(stderr, "%s", infolog);
+        glDeleteProgram(mlxctx->shaderprogram);
+        glDeleteShader(vshader);
+        glDeleteShader(fshader);
+        return (mlx_error(MLX_SHDRFAIL));
+    }
 
-	for (size_t i = 0; i < 16; i++)
-		mlxctx->bound_textures[i] = 0;
+    // Detach shaders after linking but before deleting them
+    glDetachShader(mlxctx->shaderprogram, vshader);
+    glDetachShader(mlxctx->shaderprogram, fshader);
 
-	return (true);
+    // Delete shaders
+    glDeleteShader(vshader);
+    glDeleteShader(fshader);
+    glUseProgram(mlxctx->shaderprogram);
+    for (size_t i = 0; i < 16; i++)
+        mlxctx->bound_textures[i] = 0;
+    return (true);
 }
 
 //= Public =//
@@ -152,9 +163,9 @@ bool sort_queue = false;
 
 mlx_t* mlx_init(int32_t width, int32_t height, const char* title, bool resize)
 {
+	MLX_NONNULL(title);
 	MLX_ASSERT(width > 0, "Window width must be positive");
 	MLX_ASSERT(height > 0, "Window height must be positive");
-	MLX_ASSERT(title, "Window title can't be null");
 
 	bool init;
 	mlx_t* mlx;
@@ -166,25 +177,36 @@ mlx_t* mlx_init(int32_t width, int32_t height, const char* title, bool resize)
 		return (free(mlx), (void*)mlx_error(MLX_MEMFAIL));
 
 	mlx_ctx_t* const mlxctx = mlx->context;
+    mlx->window = NULL;
 	mlx->width = width;
 	mlx->height = height;
 	mlxctx->initialWidth = width;
 	mlxctx->initialHeight = height;
 
+	// NOTE(W2): For emscripten, this value will be ignored anyway.
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef EMSCRIPTEN
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+	glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#else
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_MAXIMIZED, mlx_settings[MLX_MAXIMIZED]);
 	glfwWindowHint(GLFW_DECORATED, mlx_settings[MLX_DECORATED]);
 	glfwWindowHint(GLFW_VISIBLE, !mlx_settings[MLX_HEADLESS]);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-	glfwWindowHint(GLFW_RESIZABLE, resize);
+	glfwWindowHint(GLFW_RESIZABLE, resize ? GLFW_TRUE : GLFW_FALSE);
 	if (!(mlx->window = glfwCreateWindow(width, height, title, mlx_settings[MLX_FULLSCREEN] ? glfwGetPrimaryMonitor() : NULL, NULL)))
-		return (mlx_terminate(mlx), (void*)mlx_error(MLX_WINFAIL));
+		return (glfwTerminate(), (void*)mlx_error(MLX_WINFAIL));
 	if (!mlx_init_render(mlx) || !mlx_create_buffers(mlx))
 		return (mlx_terminate(mlx), NULL);
+    glfwMakeContextCurrent(mlx->window);
 	return (mlx);
 }
 

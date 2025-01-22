@@ -15,15 +15,15 @@
 const char	*get_error_message(enum e_ErrorCode code)
 {
 	if (code == E_MEMORY)
-		return ("Error: Can't allocate memory");
+		return ("Error: Can't allocate memory\n");
 	else if (code == E_OBLIG_DATA)
-		return ("Error: Wrong obligatory data");
+		return ("Error: Wrong obligatory data\n");
 	else if (code == E_INVALID_FILE)
-		return ("Error: Wrong passed file");
+		return ("Error: Wrong passed file\n");
 	else if (code == E_INVALID_MAP)
-		return ("Error: Invalid map format");
+		return ("Error: Invalid map format\n");
 	else if (code == E_MLX)
-		return ("Error: Something went wrong with mlx");
+		return ("Error: Something went wrong with mlx\n");
 	else
-		return ("Unknown error");
+		return ("Unknown error\n");
 }
