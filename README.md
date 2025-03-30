@@ -41,6 +41,3 @@ make
 
 ## 🙏 **Appreciation Corner**
    This remarkable project was accomplished and refined to its finest form through the assistance of my comrade and collaborator, the virtuoso [🧮 pvilchez](https://github.com/pablovilchez).
-
-## 📝 P.S.
-   If you have any questions about the project, feel free to contact me via [Telegram](https://t.me/Davyd_y_punto) or [LinkedIn](https://www.linkedin.com/in/davyd-bredykhin-1u961/).
